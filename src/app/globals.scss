@@ -1,0 +1,9 @@
+@use '@carbon/react' with (
+	$css--default-type: true,
+	$css--reset: true
+);
+@use '@carbon/layout';
+
+main {
+	margin-top: layout.$spacing-09;
+}
