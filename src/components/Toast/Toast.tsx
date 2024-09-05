@@ -2,12 +2,12 @@
 
 import { ToastNotification } from '@carbon/react';
 
+import { useToast } from '@/hooks/useToast';
+
 import styles from './Toast.module.scss';
-import { useContext } from 'react';
-import { ToastContext } from '../ToastProvider/ToastProvider';
 
 export const Toast = () => {
-	const { toastDetail, setToastDetail } = useContext(ToastContext);
+	const { toastDetail, setToastDetail } = useToast();
 
 	if (!toastDetail) return null;
 

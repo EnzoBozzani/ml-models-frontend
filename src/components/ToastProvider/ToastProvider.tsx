@@ -4,7 +4,7 @@ import { createContext, ReactNode, useState } from 'react';
 
 import Toast from '@/components/Toast';
 
-type ToastDetail = {
+export type ToastDetail = {
 	kind: 'error' | 'info' | 'info-square' | 'success' | 'warning' | 'warning-alt' | undefined;
 	title: string;
 	subtitle: string;

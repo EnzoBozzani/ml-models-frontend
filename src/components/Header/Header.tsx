@@ -1,6 +1,5 @@
 'use client';
 
-import { useContext } from 'react';
 import { signOut } from 'next-auth/react';
 import {
 	Header,
@@ -17,14 +16,14 @@ import {
 	SkipToContent,
 	Theme,
 } from '@carbon/react';
-import { Logout, Help, MachineLearning } from '@carbon/icons-react';
+import { Logout, Help, MachineLearningModel } from '@carbon/icons-react';
 
-import { ToastContext } from '@/components/ToastProvider';
+import { useToast } from '@/hooks/useToast';
 
 import styles from './Header.module.scss';
 
 export const HeaderComponent = () => {
-	const { toastDetail, setToastDetail } = useContext(ToastContext);
+	const { toastDetail, setToastDetail } = useToast();
 
 	return (
 		<Theme theme='g100'>
@@ -54,7 +53,7 @@ export const HeaderComponent = () => {
 							<HeaderNavigation aria-label='IBM ML Models'>
 								<HeaderMenuItem href='/dog-breed-identifier'>
 									<div className={styles.link}>
-										<MachineLearning />
+										<MachineLearningModel size={20} />
 										Dog breed identifier model
 									</div>
 								</HeaderMenuItem>
@@ -93,7 +92,7 @@ export const HeaderComponent = () => {
 									<HeaderSideNavItems>
 										<HeaderMenuItem href='/dog-breed-identifier'>
 											<div className={styles.link}>
-												<MachineLearning />
+												<MachineLearningModel size={20} />
 												Dog breed identifier model
 											</div>
 										</HeaderMenuItem>

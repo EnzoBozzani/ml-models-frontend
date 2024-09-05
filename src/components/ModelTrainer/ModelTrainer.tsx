@@ -1,64 +1,45 @@
 'use client';
 
-import { Form, FormGroup, TextInput } from '@carbon/react';
-import styles from './ModelTrainer.module.scss';
 import { useRef, useState } from 'react';
-import { Close } from '@carbon/icons-react';
+import { Button, Form, FormGroup, TextInput } from '@carbon/react';
+import { Close, ModelReference } from '@carbon/icons-react';
+
+import { addCategory, trainModel } from './modelTrainer.utils';
+import styles from './ModelTrainer.module.scss';
+import { useToast } from '@/hooks/useToast';
 
 export const ModelTrainer = () => {
-	const [categories, setCategories] = useState<string[]>(['Category 1', 'Category 2', 'Category 3']);
+	const { setToastDetail } = useToast();
+
+	const [categories, setCategories] = useState<string[]>([]);
 	const [invalidText, setInvalidText] = useState<string | null>(null);
+	const [messages, setMessages] = useState<string[]>([]);
+
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	return (
 		<section className={styles.section}>
-			<Form
-				onSubmit={(ev) => {
-					ev.preventDefault();
-				}}
-				aria-label='Model trainer form'
-			>
-				<FormGroup legendText='Add categories'>
-					<TextInput
-						ref={inputRef}
-						id='category'
-						labelText='Category'
-						placeholder='(e.g. Golden retriever)'
-						invalid={!!invalidText}
-						invalidText={invalidText}
-						className={styles.categoryInput}
-						onKeyDown={(ev) => {
-							if (ev.key === 'Enter') {
-								setInvalidText(null);
-
-								setCategories((prev) => {
-									if (inputRef.current) {
-										console.log(inputRef.current.value);
-										if (
-											inputRef.current.value === '' ||
-											inputRef.current.value.length > 20 ||
-											inputRef.current.value.length < 3
-										) {
-											setInvalidText('Category must have between 3 and 20 characters!');
-											return prev;
-										}
-
-										const categories = [...prev];
-										categories.push(inputRef.current.value);
-										inputRef.current.value = '';
-										return categories;
-									}
-
-									return prev;
-								});
-							}
-						}}
-					/>
-					<div className={styles.categories}>
-						{categories.map((category, i) => (
-							<span
-								className={styles.category}
-								key={`${category}-${i}`}
+			<FormGroup legendText='Add categories'>
+				<TextInput
+					ref={inputRef}
+					id='category'
+					labelText='Category (press ENTER to add)'
+					placeholder='(e.g. Golden retriever)'
+					invalid={!!invalidText}
+					invalidText={invalidText}
+					className={styles.categoryInput}
+					onKeyDownCapture={(ev) => addCategory(ev, setInvalidText, setCategories, inputRef)}
+				/>
+				<div className={styles.categories}>
+					<span className={styles.categoryTitle}>Categories ({categories.length}):</span>
+					{categories.map((category, i) => (
+						<span
+							className={styles.category}
+							key={`${category}-${i}`}
+						>
+							{category}
+							<Close
+								size={20}
 								onClick={() => {
 									setCategories((prev) => {
 										const categories = [...prev];
@@ -66,14 +47,27 @@ export const ModelTrainer = () => {
 										return categories;
 									});
 								}}
-							>
-								{category}
-								<Close size={20} />
-							</span>
-						))}
-					</div>
-				</FormGroup>
+							/>
+						</span>
+					))}
+				</div>
+			</FormGroup>
+			<Form
+				action={() => trainModel(categories, setInvalidText, setToastDetail, setMessages)}
+				aria-label='Model trainer form'
+			>
+				<Button
+					renderIcon={ModelReference}
+					type='submit'
+					size='lg'
+					className={styles.submitBtn}
+				>
+					Train model
+				</Button>
 			</Form>
+			{messages.map((message) => (
+				<>{message}</>
+			))}
 		</section>
 	);
 };

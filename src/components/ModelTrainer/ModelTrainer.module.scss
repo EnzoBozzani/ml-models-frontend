@@ -15,6 +15,8 @@
 	display: flex;
 	gap: layout.$spacing-04;
 	flex-wrap: wrap;
+	margin-bottom: layout.$spacing-05;
+	font-size: 12px;
 }
 
 .category {
@@ -23,11 +25,24 @@
 	align-items: center;
 	column-gap: layout.$spacing-02;
 	padding: layout.$spacing-02 layout.$spacing-04;
-	background-color: colors.$gray-100;
+	background-color: colors.$blue-70;
+	border: 1px solid colors.$blue-30;
+	color: colors.$blue-30;
 	border-radius: layout.$spacing-06;
 	font-weight: 600;
 
 	svg {
 		cursor: pointer;
 	}
+}
+
+.categoryTitle {
+	@extend .category;
+	background-color: colors.$blue-60;
+	border: none;
+	color: colors.$white;
+}
+
+.submitBtn {
+	width: 100%;
 }
