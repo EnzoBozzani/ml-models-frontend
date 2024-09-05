@@ -53,7 +53,7 @@ export const HeaderComponent = () => {
 							</HeaderNavigation>
 							<HeaderGlobalBar>
 								<HeaderGlobalAction
-									aria-label='Ajuda'
+									aria-label='Help'
 									onClick={() =>
 										toastDetail
 											? setToastDetail(null)
@@ -69,8 +69,8 @@ export const HeaderComponent = () => {
 									<Help size={20} />
 								</HeaderGlobalAction>
 								<HeaderGlobalAction
-									aria-label='Sair'
-									onClick={() => signOut()}
+									aria-label='Logout'
+									onClick={signOut}
 								>
 									<Logout size={20} />
 								</HeaderGlobalAction>

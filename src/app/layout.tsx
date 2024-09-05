@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Sans } from 'next/font/google';
 
 import ThemeLayout from '@/components/ThemeLayout';
-import ToastProvider from '@/components/ToastProvider';
 
 import './globals.scss';
 
@@ -27,9 +26,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={ibmPlexSans.className}>
-				<ThemeLayout>
-					<ToastProvider>{children}</ToastProvider>
-				</ThemeLayout>
+				<ThemeLayout>{children}</ThemeLayout>
 			</body>
 		</html>
 	);
