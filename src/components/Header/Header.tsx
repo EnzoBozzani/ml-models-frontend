@@ -21,7 +21,7 @@ import { Logout, Help } from '@carbon/icons-react';
 import { ToastContext } from '../ToastProvider/ToastProvider';
 
 export const HeaderComponent = () => {
-	const { setToastDetail } = useContext(ToastContext);
+	const { toastDetail, setToastDetail } = useContext(ToastContext);
 
 	return (
 		<Theme theme='g100'>
@@ -55,12 +55,15 @@ export const HeaderComponent = () => {
 								<HeaderGlobalAction
 									aria-label='Ajuda'
 									onClick={() =>
-										setToastDetail({
-											kind: 'info',
-											title: 'Oi',
-											subtitle: 'OI',
-											hideCloseButton: false,
-										})
+										toastDetail
+											? setToastDetail(null)
+											: setToastDetail({
+													kind: 'info',
+													title: 'Create your own computer vision model!',
+													subtitle:
+														'You can easily create your computer vision model just passing the categories you want to classify. Done that, the model will be trained and you can start doing your predictions. You can see how it works by testing our dog breed identifier model!',
+													hideCloseButton: false,
+											  })
 									}
 								>
 									<Help size={20} />
