@@ -1,0 +1,14 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.toastSection {
+	position: fixed;
+	right: layout.$spacing-05;
+	top: layout.$spacing-10;
+	z-index: 100;
+}
+
+.toast {
+	margin-bottom: layout.$spacing-03;
+}

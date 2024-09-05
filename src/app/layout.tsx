@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { IBM_Plex_Sans } from 'next/font/google';
 
 import ThemeLayout from '@/components/ThemeLayout';
+import ToastProvider from '@/components/ToastProvider';
 
 import './globals.scss';
 
-const inter = Inter({ subsets: ['latin'] });
+const ibmPlexSans = IBM_Plex_Sans({ weight: ['100', '200', '300', '400', '500', '600', '700'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'ML Models',
@@ -25,8 +26,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={inter.className}>
-				<ThemeLayout>{children}</ThemeLayout>
+			<body className={ibmPlexSans.className}>
+				<ThemeLayout>
+					<ToastProvider>{children}</ToastProvider>
+				</ThemeLayout>
 			</body>
 		</html>
 	);
