@@ -11,7 +11,7 @@ type ToastDetail = {
 	hideCloseButton?: boolean;
 };
 
-export interface ToastContext {
+interface ToastContext {
 	toastDetail: ToastDetail | null;
 	setToastDetail: (data: ToastDetail | null) => void;
 }

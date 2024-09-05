@@ -2,6 +2,7 @@
 
 import { ContentSwitcher, Switch } from '@carbon/react';
 import { useState } from 'react';
+import ModelTrainer from '../ModelTrainer';
 
 export const HomeContentSwitcher = () => {
 	const [selectedContent, setSelectedContent] = useState(0);
@@ -24,9 +25,7 @@ export const HomeContentSwitcher = () => {
 					text='Predict a image'
 				/>
 			</ContentSwitcher>
-			<div>
-				{selectedContent === 0 ? <>Conteudo 1</> : selectedContent === 1 ? <>Conteudo 2</> : <>Conteudo 3</>}
-			</div>
+			{selectedContent === 0 ? <ModelTrainer /> : selectedContent === 1 ? <>Conteudo 2</> : <>Conteudo 3</>}
 		</>
 	);
 };

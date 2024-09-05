@@ -1,0 +1,33 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.section {
+	margin-top: layout.$spacing-08;
+	width: 100%;
+}
+
+.categoryInput {
+	margin-bottom: layout.$spacing-05;
+}
+
+.categories {
+	display: flex;
+	gap: layout.$spacing-04;
+	flex-wrap: wrap;
+}
+
+.category {
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	column-gap: layout.$spacing-02;
+	padding: layout.$spacing-02 layout.$spacing-04;
+	background-color: colors.$gray-100;
+	border-radius: layout.$spacing-06;
+	font-weight: 600;
+
+	svg {
+		cursor: pointer;
+	}
+}

@@ -17,8 +17,11 @@ import {
 	SkipToContent,
 	Theme,
 } from '@carbon/react';
-import { Logout, Help } from '@carbon/icons-react';
-import { ToastContext } from '../ToastProvider/ToastProvider';
+import { Logout, Help, MachineLearning } from '@carbon/icons-react';
+
+import { ToastContext } from '@/components/ToastProvider';
+
+import styles from './Header.module.scss';
 
 export const HeaderComponent = () => {
 	const { toastDetail, setToastDetail } = useContext(ToastContext);
@@ -49,7 +52,12 @@ export const HeaderComponent = () => {
 								ML Models
 							</HeaderName>
 							<HeaderNavigation aria-label='IBM ML Models'>
-								<HeaderMenuItem href='/dog-breed-identifier'>Dog breed identifier model</HeaderMenuItem>
+								<HeaderMenuItem href='/dog-breed-identifier'>
+									<div className={styles.link}>
+										<MachineLearning />
+										Dog breed identifier model
+									</div>
+								</HeaderMenuItem>
 							</HeaderNavigation>
 							<HeaderGlobalBar>
 								<HeaderGlobalAction
@@ -84,7 +92,10 @@ export const HeaderComponent = () => {
 								<SideNavItems>
 									<HeaderSideNavItems>
 										<HeaderMenuItem href='/dog-breed-identifier'>
-											Dog breed identifier model
+											<div className={styles.link}>
+												<MachineLearning />
+												Dog breed identifier model
+											</div>
 										</HeaderMenuItem>
 									</HeaderSideNavItems>
 								</SideNavItems>

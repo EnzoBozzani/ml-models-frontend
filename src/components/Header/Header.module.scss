@@ -1,0 +1,9 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.link {
+	display: flex;
+	align-items: center;
+	column-gap: layout.$spacing-03;
+}
