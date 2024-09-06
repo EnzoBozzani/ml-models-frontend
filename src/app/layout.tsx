@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { IBM_Plex_Sans } from 'next/font/google';
 
-import ThemeLayout from '@/components/ThemeLayout';
+import ThemePreference, { setInitialThemeScript } from '@/components/ThemePreference';
 
 import './globals.scss';
 
@@ -26,7 +27,11 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={ibmPlexSans.className}>
-				<ThemeLayout>{children}</ThemeLayout>
+				<Script
+					id='theme-script'
+					dangerouslySetInnerHTML={{ __html: setInitialThemeScript }}
+				/>
+				<ThemePreference>{children}</ThemePreference>
 			</body>
 		</html>
 	);

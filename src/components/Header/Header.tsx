@@ -16,14 +16,17 @@ import {
 	SkipToContent,
 	Theme,
 } from '@carbon/react';
-import { Logout, Help, MachineLearningModel } from '@carbon/icons-react';
+import { Logout, Help, MachineLearningModel, Moon, Light } from '@carbon/icons-react';
 
 import { useToast } from '@/hooks/useToast';
 
 import styles from './Header.module.scss';
+import { useThemePreference } from '../ThemePreference/ThemePreference';
 
 export const HeaderComponent = () => {
 	const { toastDetail, setToastDetail } = useToast();
+
+	const { theme, setTheme } = useThemePreference();
 
 	return (
 		<Theme theme='g100'>
@@ -59,6 +62,14 @@ export const HeaderComponent = () => {
 								</HeaderMenuItem>
 							</HeaderNavigation>
 							<HeaderGlobalBar>
+								<HeaderGlobalAction
+									aria-label='Theme'
+									onClick={() => {
+										setTheme((prev) => (prev === 'g90' ? 'g10' : 'g90'));
+									}}
+								>
+									{theme === 'g10' ? <Moon size={20} /> : <Light size={20} />}
+								</HeaderGlobalAction>
 								<HeaderGlobalAction
 									aria-label='Help'
 									onClick={() =>
