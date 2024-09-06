@@ -52,15 +52,15 @@ export const trainModel = async (
 	}
 
 	try {
-		const response = await fetch('http://localhost:8000/process', {
+		const res1 = await fetch('http://localhost:8000/search-images', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(['imagem1', 'imagem2', 'imagem3']),
+			body: JSON.stringify(categories),
 		});
 
-		if (!response.body) {
+		if (!res1.body) {
 			setToastDetail({
 				kind: 'error',
 				title: 'Something went wrong!',
@@ -69,7 +69,7 @@ export const trainModel = async (
 			return;
 		}
 
-		const reader = response.body.getReader();
+		const reader = res1.body.getReader();
 		const decoder = new TextDecoder('utf-8');
 		let done = false;
 
@@ -86,6 +86,34 @@ export const trainModel = async (
 
 				return newMessages;
 			});
+		}
+
+		const res2 = await fetch('http://localhost:8000/train-model', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			// body: JSON.stringify(categories), must send the last chunk received by the previous request
+		});
+
+		if (!res2.body) {
+			setToastDetail({
+				kind: 'error',
+				title: 'Something went wrong!',
+				subtitle: 'Something went wrong while training the model...',
+			});
+			return;
+		}
+
+		done = false;
+
+		while (!done) {
+			const { value, done: readerDone } = await reader.read();
+			done = readerDone;
+
+			const chunk = decoder.decode(value, { stream: true });
+
+			console.log(chunk);
 		}
 	} catch (error) {
 		setToastDetail({
