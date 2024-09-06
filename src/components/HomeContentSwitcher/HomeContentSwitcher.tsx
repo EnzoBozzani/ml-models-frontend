@@ -20,11 +20,11 @@ export const HomeContentSwitcher = () => {
 			>
 				<Switch
 					name='one'
-					text='Train the model'
+					text='Training'
 				/>
 				<Switch
 					name='two'
-					text='Predict a image'
+					text='Prediction'
 				/>
 			</ContentSwitcher>
 			{selectedContent === 0 ? <ModelTrainer /> : <PredictImage />}

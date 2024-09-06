@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Button, Form, FormGroup, TextInput } from '@carbon/react';
-import { Close, ModelReference } from '@carbon/icons-react';
+import { Button, Form, FormGroup, InlineNotification, TextInput } from '@carbon/react';
+import { Close, ModelReference } from '@carbon/react/icons';
 
 import { addCategory, trainModel } from './modelTrainer.utils';
 import styles from './ModelTrainer.module.scss';
@@ -19,7 +19,14 @@ export const ModelTrainer = () => {
 
 	return (
 		<section className={styles.section}>
-			<FormGroup legendText='Add categories'>
+			<InlineNotification
+				kind='info'
+				title='Inform the categories to train the model'
+				subtitle='All you need to do is inform some categories (e.g. dog breeds). When clicking "Train model", pictures of each of these categories will be searched and used to train the model. At last, a .pkl fike will be generated containing the trained model, which you can use in the "Prediction" tab to see the model prediction for an specific image!'
+				hideCloseButton
+				className={styles.notification}
+			/>
+			<FormGroup legendText='Model training'>
 				<TextInput
 					ref={inputRef}
 					id='category'

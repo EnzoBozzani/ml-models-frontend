@@ -10,6 +10,8 @@
 
 @use '../components/ThemePreference/ThemePreference.module.scss';
 
+@include grid.flex-grid();
+
 body {
 	min-height: 100vh;
 	width: 100%;

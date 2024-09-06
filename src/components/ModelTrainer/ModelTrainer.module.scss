@@ -4,7 +4,19 @@
 
 .section {
 	margin-top: layout.$spacing-08;
-	width: 100%;
+	min-width: 100%;
+
+	legend {
+		font-size: 20px;
+		font-weight: 700;
+		margin-bottom: layout.$spacing-06;
+	}
+}
+
+.notification {
+	margin-bottom: layout.$spacing-06;
+	max-width: none;
+	min-width: 250px !important;
 }
 
 .categoryInput {

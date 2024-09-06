@@ -10,7 +10,6 @@
 		"create-component": "node ./scripts/generate-component.js"
 	},
 	"dependencies": {
-		"@carbon/icons-react": "^11.48.0",
 		"@carbon/react": "^1.65.0",
 		"next": "14.2.7",
 		"next-auth": "^4.24.7",

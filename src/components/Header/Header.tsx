@@ -16,7 +16,7 @@ import {
 	SkipToContent,
 	Theme,
 } from '@carbon/react';
-import { Logout, Help, MachineLearningModel, Moon, Light } from '@carbon/icons-react';
+import { Logout, Help, MachineLearningModel, Moon, Light } from '@carbon/react/icons';
 
 import { useToast } from '@/hooks/useToast';
 import { useThemePreference } from '@/hooks/useThemePreference';
@@ -77,9 +77,9 @@ export const HeaderComponent = () => {
 											? setToastDetail(null)
 											: setToastDetail({
 													kind: 'info',
-													title: 'Create your own computer vision model!',
+													title: 'Create your own machine learning model!',
 													subtitle:
-														'You can easily create your computer vision model just passing the categories you want to classify. Done that, the model will be trained and you can start doing your predictions. You can see how it works by testing our dog breed identifier model!',
+														'You can easily create your machine learning model just passing the categories you want to classify. Done that, the model will be trained and you can start doing your predictions. You can see how it works by testing our dog breed identifier model!',
 													hideCloseButton: false,
 											  })
 									}
