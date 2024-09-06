@@ -19,9 +19,9 @@ import {
 import { Logout, Help, MachineLearningModel, Moon, Light } from '@carbon/icons-react';
 
 import { useToast } from '@/hooks/useToast';
+import { useThemePreference } from '@/hooks/useThemePreference';
 
 import styles from './Header.module.scss';
-import { useThemePreference } from '../ThemePreference/ThemePreference';
 
 export const HeaderComponent = () => {
 	const { toastDetail, setToastDetail } = useToast();
@@ -29,7 +29,7 @@ export const HeaderComponent = () => {
 	const { theme, setTheme } = useThemePreference();
 
 	return (
-		<Theme theme='g100'>
+		<Theme theme={theme === 'g10' ? 'white' : 'g100'}>
 			<HeaderContainer
 				render={({
 					isSideNavExpanded,

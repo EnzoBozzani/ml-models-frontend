@@ -1,8 +1,10 @@
 'use client';
 
-import { ContentSwitcher, Switch } from '@carbon/react';
 import { useState } from 'react';
+import { ContentSwitcher, Switch } from '@carbon/react';
+
 import ModelTrainer from '../ModelTrainer';
+import PredictImage from '../PredictImage';
 
 export const HomeContentSwitcher = () => {
 	const [selectedContent, setSelectedContent] = useState(0);
@@ -25,7 +27,7 @@ export const HomeContentSwitcher = () => {
 					text='Predict a image'
 				/>
 			</ContentSwitcher>
-			{selectedContent === 0 ? <ModelTrainer /> : selectedContent === 1 ? <>Conteudo 2</> : <>Conteudo 3</>}
+			{selectedContent === 0 ? <ModelTrainer /> : <PredictImage />}
 		</>
 	);
 };

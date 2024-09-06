@@ -1,0 +1,8 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.error {
+	color: colors.$red-60;
+	font-size: 12px;
+}

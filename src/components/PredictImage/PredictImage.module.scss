@@ -1,0 +1,23 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.section {
+	margin-top: layout.$spacing-08;
+	width: 100%;
+
+	legend {
+		font-weight: 700;
+		font-size: 14px;
+	}
+}
+
+.description {
+	font-size: 13px;
+	font-weight: 300;
+	margin-bottom: layout.$spacing-04;
+}
+
+.input {
+	margin-bottom: layout.$spacing-02;
+}

@@ -1,7 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-
+import { createContext, useEffect, useState } from 'react';
 import { Content, GlobalTheme } from '@carbon/react';
 
 export const setInitialThemeScript = `
@@ -30,11 +29,7 @@ type ThemePreferenceContext =
 	  }
 	| undefined;
 
-const ThemePreferenceContext = createContext<ThemePreferenceContext>(undefined);
-
-export function useThemePreference() {
-	return useContext(ThemePreferenceContext)!;
-}
+export const ThemePreferenceContext = createContext<ThemePreferenceContext>(undefined);
 
 export const ThemePreference: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 	const [theme, setTheme] = useState<ThemeValue>(undefined);
