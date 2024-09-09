@@ -35,13 +35,13 @@ export const DragAndDropFileUploader = ({
 					multiple={false}
 					name={id}
 					onAddFiles={upload}
-					style={{ border: error ? '1px solid red' : '' }}
+					style={{ border: error ? '1px dotted red' : '' }}
 					className={styles.input}
 				/>
 			</FormGroup>
 			{file && (
 				<FileUploaderItem
-					name={file.name}
+					name={`${file.name} (${(file.size / 1_000_000).toFixed(1)} MB)`}
 					status={'complete'}
 					errorBody={'Something went wrong!'}
 				/>

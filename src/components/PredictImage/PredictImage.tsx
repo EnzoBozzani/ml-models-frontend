@@ -8,7 +8,7 @@ import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
 
 import styles from './PredictImage.module.scss';
 
-const MB = 1024 * 1024;
+const MB = 1_000_000;
 
 export const PredictImage = () => {
 	const [modelFile, setModelFile] = useState<File | null>(null);
@@ -23,7 +23,7 @@ export const PredictImage = () => {
 
 		const f = content.addedFiles[0];
 
-		if (f.size > 200_000 * MB) {
+		if (f.size > 200 * MB) {
 			setModelError(`The file has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 200MB.`);
 			return;
 		}
@@ -39,7 +39,7 @@ export const PredictImage = () => {
 		const f = content.addedFiles[0];
 
 		if (f.size > 2 * MB) {
-			setImageError(`The file has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 1MB.`);
+			setImageError(`The file has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 2MB.`);
 			return;
 		}
 
@@ -55,7 +55,20 @@ export const PredictImage = () => {
 				hideCloseButton
 				className={styles.notification}
 			/>
-			<Form className={styles.form}>
+			<Form
+				onSubmit={(ev) => {
+					ev.preventDefault();
+
+					setImageError(null);
+					setModelError(null);
+
+					if (!image || !modelFile) {
+						setImageError('Image is required!');
+						setModelError('Model is required!');
+					}
+				}}
+				className={styles.form}
+			>
 				<div className={styles.dragAndDrop}>
 					<DragAndDropFileUploader
 						file={modelFile}
@@ -81,6 +94,7 @@ export const PredictImage = () => {
 				<Button
 					className={styles.submitBtn}
 					renderIcon={ForecastLightning}
+					type='submit'
 				>
 					Predict
 				</Button>
