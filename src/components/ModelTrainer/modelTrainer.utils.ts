@@ -1,5 +1,7 @@
-import { Dispatch, KeyboardEvent, RefObject, SetStateAction, TransitionStartFunction } from 'react';
-import { ToastDetail } from '../ToastProvider/ToastProvider';
+import { Dispatch, KeyboardEvent, RefObject, SetStateAction } from 'react';
+
+import { fetcher } from '@/utils/fetcher';
+import { ToastDetail } from '@/components/ToastProvider/ToastProvider';
 
 export const addCategory = (
 	ev: KeyboardEvent<HTMLInputElement>,
@@ -45,20 +47,11 @@ interface TrainModelArguments {
 	setInvalidText: Dispatch<SetStateAction<string | null>>;
 	setToastDetail: (data: ToastDetail | null) => void;
 	setMessages: Dispatch<SetStateAction<string[]>>;
-	setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export const trainModel = async ({
-	categories,
-	setInvalidText,
-	setToastDetail,
-	setMessages,
-	setLoading,
-}: TrainModelArguments) => {
+export const trainModel = async ({ categories, setInvalidText, setToastDetail, setMessages }: TrainModelArguments) => {
 	setMessages([]);
 	setInvalidText(null);
-
-	setLoading(true);
 
 	if (categories.length < 2) {
 		setInvalidText('At least 2 categories are needed!');
@@ -66,13 +59,7 @@ export const trainModel = async ({
 	}
 
 	try {
-		const imagesSearchResponse = await fetch('http://localhost:8000/search-images', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(categories),
-		});
+		const imagesSearchResponse = await fetcher.searchImages(categories);
 
 		if (!imagesSearchResponse.body) {
 			setToastDetail({
@@ -80,6 +67,7 @@ export const trainModel = async ({
 				title: 'Something went wrong!',
 				subtitle: 'Something went wrong while training the model...',
 			});
+			setMessages([]);
 			return;
 		}
 
@@ -120,12 +108,7 @@ export const trainModel = async ({
 			return messages;
 		});
 
-		const modelTrainingResponse = await fetch(`http://localhost:8000/train-model/${pathId}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const modelTrainingResponse = await fetcher.trainModel(pathId);
 
 		if (!modelTrainingResponse.ok) {
 			setToastDetail({
@@ -156,6 +139,6 @@ export const trainModel = async ({
 			title: 'Something went wrong!',
 			subtitle: 'Something went wrong while training the model...',
 		});
+		setMessages([]);
 	}
-	setLoading(false);
 };

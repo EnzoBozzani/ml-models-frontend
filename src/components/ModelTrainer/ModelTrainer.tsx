@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
-import { Button, Form, FormGroup, InlineNotification, TextInput } from '@carbon/react';
-import { Close, Download, ModelReference } from '@carbon/react/icons';
+import { useRef, useState } from 'react';
+import { Button, FormGroup, InlineNotification, TextInput } from '@carbon/react';
+import { Close, ModelReference } from '@carbon/react/icons';
 
 import { useToast } from '@/hooks/useToast';
 
@@ -64,13 +64,15 @@ export const ModelTrainer = () => {
 			</FormGroup>
 			<Button
 				onClick={async () => {
+					setLoading(true);
 					await trainModel({
 						categories,
 						setInvalidText,
 						setToastDetail,
 						setMessages,
-						setLoading,
 					});
+					setCategories([]);
+					setLoading(false);
 				}}
 				renderIcon={ModelReference}
 				type='submit'
