@@ -1,0 +1,13 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.description {
+	font-size: 13px;
+	font-weight: 300;
+	margin-bottom: layout.$spacing-04;
+}
+
+.input {
+	margin-bottom: layout.$spacing-02;
+}

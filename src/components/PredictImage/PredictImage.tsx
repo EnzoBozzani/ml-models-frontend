@@ -14,11 +14,13 @@ import { ForecastLightning } from '@carbon/react/icons';
 import ErrorMessage from '@/components/ErrorMessage';
 
 import styles from './PredictImage.module.scss';
+import DragAndDropFileUploader from '../DragAndDropFileUploader';
 
 const MB = 1024 * 1024;
 
 export const PredictImage = () => {
-	const [file, setFile] = useState<File | null>(null);
+	const [modelFile, setModelFile] = useState<File | null>(null);
+	const [image, setImage] = useState<File | null>(null);
 	const [modelError, setModelError] = useState<string | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
 
@@ -34,7 +36,7 @@ export const PredictImage = () => {
 			return;
 		}
 
-		setFile(f);
+		setModelFile(f);
 	};
 
 	const uploadImage = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
@@ -44,12 +46,12 @@ export const PredictImage = () => {
 
 		const f = content.addedFiles[0];
 
-		if (f.size > 1 * MB) {
+		if (f.size > 2 * MB) {
 			setImageError(`The file has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 1MB.`);
 			return;
 		}
 
-		setFile(f);
+		setImage(f);
 	};
 
 	return (
@@ -61,63 +63,28 @@ export const PredictImage = () => {
 				hideCloseButton
 				className={styles.notification}
 			/>
-			<Form>
-				<div
-					style={{ paddingInline: 0 }}
-					className='cds--grid'
-				>
-					<div className='cds--row'>
-						<div className='cds--col'>
-							<FormGroup legendText='Upload model'>
-								<p className={styles.description}>
-									Max file size is 200mb. Only .pkl files are supported.
-								</p>
-								<FileUploaderDropContainer
-									id='file'
-									accept={['.pkl']}
-									labelText='Drag and drop file here or click to upload'
-									multiple={false}
-									name='file'
-									onAddFiles={uploadModel}
-									style={{ border: modelError ? '1px solid red' : '' }}
-									className={styles.input}
-								/>
-							</FormGroup>
-							{file && (
-								<FileUploaderItem
-									name={file.name}
-									status={'complete'}
-									errorBody={'Something went wrong!'}
-								/>
-							)}
-							<ErrorMessage error={modelError} />
-						</div>
-						<div className='cds--col'>
-							<FormGroup legendText='Upload image'>
-								<p className={styles.description}>
-									Max file size is 1mb. Only .jpg files are supported.
-								</p>
-								<FileUploaderDropContainer
-									id='image'
-									accept={['.jpg']}
-									labelText='Drag and drop file here or click to upload'
-									multiple={false}
-									name='image'
-									onAddFiles={uploadImage}
-									style={{ border: imageError ? '1px solid red' : '' }}
-									className={styles.input}
-								/>
-							</FormGroup>
-							{file && (
-								<FileUploaderItem
-									name={file.name}
-									status={'complete'}
-									errorBody={'Something went wrong!'}
-								/>
-							)}
-							<ErrorMessage error={imageError} />
-						</div>
-					</div>
+			<Form className={styles.form}>
+				<div className={styles.dragAndDrop}>
+					<DragAndDropFileUploader
+						file={modelFile}
+						error={modelError}
+						upload={uploadModel}
+						text='Max file size is 200mb. Only .pkl files are supported'
+						accept={['.pkl']}
+						id='modelFile'
+						legendText='Upload model'
+					/>
+				</div>
+				<div className={styles.dragAndDrop}>
+					<DragAndDropFileUploader
+						accept={['image/jpeg']}
+						error={imageError}
+						file={image}
+						id='image'
+						legendText='Upload image'
+						text='Max file size is 2mb. Only .jpg files are supported'
+						upload={uploadImage}
+					/>
 				</div>
 				<Button
 					className={styles.submitBtn}

@@ -18,17 +18,28 @@
 	min-width: 250px !important;
 }
 
-.description {
-	font-size: 13px;
-	font-weight: 300;
-	margin-bottom: layout.$spacing-04;
+.form {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: layout.$spacing-06;
+
+	@include grid.breakpoint-down('md') {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+	}
 }
 
-.input {
-	margin-bottom: layout.$spacing-02;
+.dragAndDrop {
+	@include grid.breakpoint-down('md') {
+		display: grid;
+		place-items: center;
+	}
 }
 
 .submitBtn {
 	margin-top: layout.$spacing-06;
 	width: 100%;
+
+	@include grid.breakpoint-down('md') {
+		margin: 0 auto;
+	}
 }
