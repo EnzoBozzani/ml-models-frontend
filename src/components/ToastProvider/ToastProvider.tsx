@@ -11,12 +11,12 @@ export type ToastDetail = {
 	hideCloseButton?: boolean;
 };
 
-interface ToastContext {
+interface ToastContextType {
 	toastDetail: ToastDetail | null;
 	setToastDetail: (data: ToastDetail | null) => void;
 }
 
-export const ToastContext = createContext<ToastContext>({ toastDetail: null, setToastDetail: () => {} });
+export const ToastContext = createContext<ToastContextType>({ toastDetail: null, setToastDetail: () => {} });
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
 	const [toastDetail, setToastDetail] = useState<ToastDetail | null>(null);
@@ -24,7 +24,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 	return (
 		<ToastContext.Provider value={{ toastDetail, setToastDetail }}>
 			{children}
-			<Toast />
+			<Toast toastContext={{ toastDetail, setToastDetail }} />
 		</ToastContext.Provider>
 	);
 };

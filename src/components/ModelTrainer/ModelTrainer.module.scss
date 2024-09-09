@@ -58,3 +58,15 @@
 .submitBtn {
 	width: 100%;
 }
+
+.output {
+	margin-top: layout.$spacing-06;
+	display: flex;
+	flex-direction: column;
+}
+
+.downloadLink {
+	text-decoration: none;
+	width: 100%;
+	color: inherit;
+}

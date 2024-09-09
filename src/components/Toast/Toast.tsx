@@ -5,9 +5,17 @@ import { ToastNotification } from '@carbon/react';
 import { useToast } from '@/hooks/useToast';
 
 import styles from './Toast.module.scss';
+import { ToastDetail } from '../ToastProvider/ToastProvider';
 
-export const Toast = () => {
-	const { toastDetail, setToastDetail } = useToast();
+export const Toast = ({
+	toastContext,
+}: {
+	toastContext: {
+		toastDetail: ToastDetail | null;
+		setToastDetail: (data: ToastDetail | null) => void;
+	};
+}) => {
+	const { toastDetail, setToastDetail } = toastContext;
 
 	if (!toastDetail) return null;
 

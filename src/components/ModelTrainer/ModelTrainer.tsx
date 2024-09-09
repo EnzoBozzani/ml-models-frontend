@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { Button, Form, FormGroup, InlineNotification, TextInput } from '@carbon/react';
-import { Close, ModelReference } from '@carbon/react/icons';
+import { Close, Download, ModelReference } from '@carbon/react/icons';
+
+import { useToast } from '@/hooks/useToast';
 
 import { addCategory, trainModel } from './modelTrainer.utils';
 import styles from './ModelTrainer.module.scss';
-import { useToast } from '@/hooks/useToast';
 
 export const ModelTrainer = () => {
 	const { setToastDetail } = useToast();
@@ -14,6 +15,7 @@ export const ModelTrainer = () => {
 	const [categories, setCategories] = useState<string[]>([]);
 	const [invalidText, setInvalidText] = useState<string | null>(null);
 	const [messages, setMessages] = useState<string[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -36,6 +38,7 @@ export const ModelTrainer = () => {
 					invalidText={invalidText}
 					className={styles.categoryInput}
 					onKeyDownCapture={(ev) => addCategory(ev, setInvalidText, setCategories, inputRef)}
+					disabled={loading}
 				/>
 				<div className={styles.categories}>
 					<span className={styles.categoryTitle}>Categories ({categories.length}):</span>
@@ -60,7 +63,15 @@ export const ModelTrainer = () => {
 				</div>
 			</FormGroup>
 			<Form
-				action={() => trainModel(categories, setInvalidText, setToastDetail, setMessages)}
+				action={() =>
+					trainModel({
+						categories,
+						setInvalidText,
+						setToastDetail,
+						setMessages,
+						setLoading,
+					})
+				}
 				aria-label='Model trainer form'
 			>
 				<Button
@@ -68,13 +79,23 @@ export const ModelTrainer = () => {
 					type='submit'
 					size='lg'
 					className={styles.submitBtn}
+					disabled={loading}
 				>
 					Train model
 				</Button>
 			</Form>
-			{messages.map((message) => (
-				<>{message}</>
-			))}
+			<div className={styles.output}>
+				{messages.map((message, i) => (
+					<InlineNotification
+						key={message + i}
+						title={message}
+						kind='success'
+						subtitle=''
+						hideCloseButton
+						className={styles.notification}
+					/>
+				))}
+			</div>
 		</section>
 	);
 };

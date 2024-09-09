@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { IBM_Plex_Sans } from 'next/font/google';
 
 import ThemePreference, { setInitialThemeScript } from '@/components/ThemePreference';
+import ToastProvider from '@/components/ToastProvider';
 
 import './globals.scss';
 
@@ -34,7 +35,9 @@ export default function RootLayout({
 					id='theme-script'
 					dangerouslySetInnerHTML={{ __html: setInitialThemeScript }}
 				/>
-				<ThemePreference>{children}</ThemePreference>
+				<ThemePreference>
+					<ToastProvider>{children}</ToastProvider>
+				</ThemePreference>
 			</body>
 		</html>
 	);

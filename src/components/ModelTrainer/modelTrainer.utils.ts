@@ -1,4 +1,4 @@
-import { Dispatch, KeyboardEvent, RefObject, SetStateAction } from 'react';
+import { Dispatch, KeyboardEvent, RefObject, SetStateAction, TransitionStartFunction } from 'react';
 import { ToastDetail } from '../ToastProvider/ToastProvider';
 
 export const addCategory = (
@@ -40,19 +40,33 @@ export const addCategory = (
 	}
 };
 
-export const trainModel = async (
-	categories: string[],
-	setInvalidText: Dispatch<SetStateAction<string | null>>,
-	setToastDetail: (data: ToastDetail | null) => void,
-	setMessages: Dispatch<SetStateAction<string[]>>
-) => {
+interface TrainModelArguments {
+	categories: string[];
+	setInvalidText: Dispatch<SetStateAction<string | null>>;
+	setToastDetail: (data: ToastDetail | null) => void;
+	setMessages: Dispatch<SetStateAction<string[]>>;
+	setLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+export const trainModel = async ({
+	categories,
+	setInvalidText,
+	setToastDetail,
+	setMessages,
+	setLoading,
+}: TrainModelArguments) => {
+	setMessages([]);
+	setInvalidText(null);
+
+	setLoading(true);
+
 	if (categories.length < 2) {
 		setInvalidText('At least 2 categories are needed!');
 		return;
 	}
 
 	try {
-		const res1 = await fetch('http://localhost:8000/search-images', {
+		const imagesSearchResponse = await fetch('http://localhost:8000/search-images', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -60,7 +74,7 @@ export const trainModel = async (
 			body: JSON.stringify(categories),
 		});
 
-		if (!res1.body) {
+		if (!imagesSearchResponse.body) {
 			setToastDetail({
 				kind: 'error',
 				title: 'Something went wrong!',
@@ -69,9 +83,11 @@ export const trainModel = async (
 			return;
 		}
 
-		const reader = res1.body.getReader();
+		const reader = imagesSearchResponse.body.getReader();
 		const decoder = new TextDecoder('utf-8');
 		let done = false;
+
+		let folderId = '';
 
 		while (!done) {
 			const { value, done: readerDone } = await reader.read();
@@ -88,7 +104,17 @@ export const trainModel = async (
 			});
 		}
 
-		const res2 = await fetch('http://localhost:8000/train-model', {
+		setMessages((prev) => {
+			const newMessages = [...prev];
+
+			folderId = newMessages.pop() || 'blabla';
+
+			return newMessages;
+		});
+
+		console.log(folderId);
+
+		const modelTrainingResponse = await fetch('http://localhost:8000/train-model', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -96,7 +122,7 @@ export const trainModel = async (
 			// body: JSON.stringify(categories), must send the last chunk received by the previous request
 		});
 
-		if (!res2.body) {
+		if (!modelTrainingResponse.ok) {
 			setToastDetail({
 				kind: 'error',
 				title: 'Something went wrong!',
@@ -105,16 +131,20 @@ export const trainModel = async (
 			return;
 		}
 
-		done = false;
+		const blob = await modelTrainingResponse.blob();
+		const url = window.URL.createObjectURL(blob);
 
-		while (!done) {
-			const { value, done: readerDone } = await reader.read();
-			done = readerDone;
+		const link = document.createElement('a');
 
-			const chunk = decoder.decode(value, { stream: true });
+		link.href = url;
+		link.setAttribute('download', 'arquivo.pkl');
+		document.body.appendChild(link);
+		link.click();
 
-			console.log(chunk);
-		}
+		link.parentNode!.removeChild(link);
+		window.URL.revokeObjectURL(url);
+
+		setMessages(['Model downloaded successfully! Proceed to Prediction tab']);
 	} catch (error) {
 		setToastDetail({
 			kind: 'error',
@@ -122,4 +152,5 @@ export const trainModel = async (
 			subtitle: 'Something went wrong while training the model...',
 		});
 	}
+	setLoading(false);
 };
