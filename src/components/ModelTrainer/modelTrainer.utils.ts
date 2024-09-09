@@ -87,13 +87,18 @@ export const trainModel = async ({
 		const decoder = new TextDecoder('utf-8');
 		let done = false;
 
-		let folderId = '';
+		let lastChunk = '';
+		let pathId = '';
 
 		while (!done) {
 			const { value, done: readerDone } = await reader.read();
 			done = readerDone;
 
 			const chunk = decoder.decode(value, { stream: true });
+
+			if (done) {
+				pathId = lastChunk;
+			}
 
 			setMessages((prev) => {
 				const newMessages = [...prev];
@@ -102,24 +107,24 @@ export const trainModel = async ({
 
 				return newMessages;
 			});
+
+			lastChunk = chunk;
 		}
 
 		setMessages((prev) => {
-			const newMessages = [...prev];
+			const messages = [...prev];
 
-			folderId = newMessages.pop() || 'blabla';
+			messages.pop();
+			messages.pop();
 
-			return newMessages;
+			return messages;
 		});
 
-		console.log(folderId);
-
-		const modelTrainingResponse = await fetch('http://localhost:8000/train-model', {
+		const modelTrainingResponse = await fetch(`http://localhost:8000/train-model/${pathId}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			// body: JSON.stringify(categories), must send the last chunk received by the previous request
 		});
 
 		if (!modelTrainingResponse.ok) {
@@ -137,7 +142,7 @@ export const trainModel = async ({
 		const link = document.createElement('a');
 
 		link.href = url;
-		link.setAttribute('download', 'arquivo.pkl');
+		link.setAttribute('download', 'model.pkl');
 		document.body.appendChild(link);
 		link.click();
 

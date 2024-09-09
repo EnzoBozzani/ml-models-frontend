@@ -62,28 +62,24 @@ export const ModelTrainer = () => {
 					))}
 				</div>
 			</FormGroup>
-			<Form
-				action={() =>
-					trainModel({
+			<Button
+				onClick={async () => {
+					await trainModel({
 						categories,
 						setInvalidText,
 						setToastDetail,
 						setMessages,
 						setLoading,
-					})
-				}
-				aria-label='Model trainer form'
+					});
+				}}
+				renderIcon={ModelReference}
+				type='submit'
+				size='lg'
+				className={styles.submitBtn}
+				disabled={loading}
 			>
-				<Button
-					renderIcon={ModelReference}
-					type='submit'
-					size='lg'
-					className={styles.submitBtn}
-					disabled={loading}
-				>
-					Train model
-				</Button>
-			</Form>
+				Train model
+			</Button>
 			<div className={styles.output}>
 				{messages.map((message, i) => (
 					<InlineNotification
