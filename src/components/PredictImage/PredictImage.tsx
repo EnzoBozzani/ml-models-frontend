@@ -1,20 +1,12 @@
 'use client';
 
 import { SyntheticEvent, useState } from 'react';
-import {
-	Button,
-	FileUploaderDropContainer,
-	FileUploaderItem,
-	Form,
-	FormGroup,
-	InlineNotification,
-} from '@carbon/react';
+import { Button, Form, InlineNotification } from '@carbon/react';
 import { ForecastLightning } from '@carbon/react/icons';
 
-import ErrorMessage from '@/components/ErrorMessage';
+import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
 
 import styles from './PredictImage.module.scss';
-import DragAndDropFileUploader from '../DragAndDropFileUploader';
 
 const MB = 1024 * 1024;
 

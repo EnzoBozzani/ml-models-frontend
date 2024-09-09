@@ -1,7 +1,9 @@
-import { FormGroup, FileUploaderDropContainer, FileUploaderItem } from '@carbon/react';
-import ErrorMessage from '@/components/ErrorMessage';
-import styles from './DragAndDropFileUploader.module.scss';
 import { SyntheticEvent } from 'react';
+import { FormGroup, FileUploaderDropContainer, FileUploaderItem } from '@carbon/react';
+
+import ErrorMessage from '@/components/ErrorMessage';
+
+import styles from './DragAndDropFileUploader.module.scss';
 
 export interface DragAndDropFileUploaderProps {
 	upload: (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => void;
