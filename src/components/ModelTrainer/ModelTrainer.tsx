@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Button, FormGroup, InlineNotification, TextInput } from '@carbon/react';
 import { Close, ModelReference } from '@carbon/react/icons';
 
@@ -9,7 +9,11 @@ import { useToast } from '@/hooks/useToast';
 import { addCategory, trainModel } from './modelTrainer.utils';
 import styles from './ModelTrainer.module.scss';
 
-export const ModelTrainer = () => {
+interface ModelTrainerProps {
+	setTabsSwitcherDisabled: Dispatch<SetStateAction<boolean>>;
+}
+
+export const ModelTrainer = ({ setTabsSwitcherDisabled }: ModelTrainerProps) => {
 	const { setToastDetail } = useToast();
 
 	const [categories, setCategories] = useState<string[]>([]);
@@ -18,6 +22,10 @@ export const ModelTrainer = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	useEffect(() => {
+		setTabsSwitcherDisabled(loading);
+	}, [loading, setTabsSwitcherDisabled]);
 
 	return (
 		<section className={styles.section}>
@@ -89,7 +97,7 @@ export const ModelTrainer = () => {
 						title={message}
 						kind='success'
 						subtitle=''
-						hideCloseButton
+						hideCloseButton={message !== 'Model downloaded successfully! Proceed to Prediction tab'}
 						className={styles.notification}
 					/>
 				))}

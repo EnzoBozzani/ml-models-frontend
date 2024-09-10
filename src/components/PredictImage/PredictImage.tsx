@@ -1,6 +1,6 @@
 'use client';
 
-import { SyntheticEvent, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 import { Button, Form, InlineNotification } from '@carbon/react';
 import { ForecastLightning } from '@carbon/react/icons';
 
@@ -10,11 +10,16 @@ import styles from './PredictImage.module.scss';
 
 const MB = 1_000_000;
 
-export const PredictImage = () => {
+interface PredictImageProps {
+	setTabsSwitcherDisabled: Dispatch<SetStateAction<boolean>>;
+}
+
+export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => {
 	const [modelFile, setModelFile] = useState<File | null>(null);
 	const [image, setImage] = useState<File | null>(null);
 	const [modelError, setModelError] = useState<string | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const uploadModel = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
 		e.preventDefault();
@@ -46,6 +51,25 @@ export const PredictImage = () => {
 		setImage(f);
 	};
 
+	const submitPrediction = async (ev: FormEvent<HTMLFormElement>) => {
+		ev.preventDefault();
+		setLoading(true);
+
+		setImageError(null);
+		setModelError(null);
+
+		if (!image || !modelFile) {
+			setImageError('Image is required!');
+			setModelError('Model is required!');
+		}
+
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		setTabsSwitcherDisabled(loading);
+	}, [loading, setTabsSwitcherDisabled]);
+
 	return (
 		<section className={styles.section}>
 			<InlineNotification
@@ -56,17 +80,7 @@ export const PredictImage = () => {
 				className={styles.notification}
 			/>
 			<Form
-				onSubmit={(ev) => {
-					ev.preventDefault();
-
-					setImageError(null);
-					setModelError(null);
-
-					if (!image || !modelFile) {
-						setImageError('Image is required!');
-						setModelError('Model is required!');
-					}
-				}}
+				onSubmit={submitPrediction}
 				className={styles.form}
 			>
 				<div className={styles.dragAndDrop}>

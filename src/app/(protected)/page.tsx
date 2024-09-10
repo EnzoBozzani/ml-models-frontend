@@ -1,9 +1,13 @@
 import TabsSwitcher from '@/components/TabsSwitcher';
 
-const Home = () => {
+const Home = ({ searchParams }: { searchParams: { tab: string | undefined } }) => {
+	const { tab } = searchParams;
+
+	const initialTab = !tab || (tab !== 'training' && tab !== 'prediction') ? 'training' : tab;
+
 	return (
 		<main>
-			<TabsSwitcher />
+			<TabsSwitcher tab={initialTab} />
 		</main>
 	);
 };
