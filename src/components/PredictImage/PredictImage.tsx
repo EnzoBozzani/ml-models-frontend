@@ -7,6 +7,7 @@ import { ForecastLightning } from '@carbon/react/icons';
 import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
 
 import styles from './PredictImage.module.scss';
+import { fetcher } from '@/utils/fetcher';
 
 const MB = 1_000_000;
 
@@ -59,9 +60,32 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		setModelError(null);
 
 		if (!image || !modelFile) {
-			setImageError('Image is required!');
-			setModelError('Model is required!');
+			if (!image) {
+				setImageError('Image is required!');
+			}
+			if (!modelFile) {
+				setModelError('Model is required!');
+			}
+			return;
 		}
+
+		const formData = new FormData();
+
+		formData.append('image', image);
+		formData.append('model', modelFile);
+
+		const predictionResponse = await fetcher.predict(formData);
+
+		if (predictionResponse.ok) {
+			const oi = await predictionResponse.json();
+
+			alert(JSON.stringify(oi));
+		} else {
+			alert('Não ');
+		}
+
+		setImage(null);
+		setModelFile(null);
 
 		setLoading(false);
 	};
@@ -92,6 +116,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 						accept={['.pkl']}
 						id='modelFile'
 						legendText='Upload model'
+						disabled={loading}
 					/>
 				</div>
 				<div className={styles.dragAndDrop}>
@@ -103,6 +128,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 						legendText='Upload image'
 						text='Max file size is 2mb. Only .jpg files are supported'
 						upload={uploadImage}
+						disabled={loading}
 					/>
 				</div>
 				<Button

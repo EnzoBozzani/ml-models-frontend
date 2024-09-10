@@ -19,4 +19,11 @@ export const fetcher = {
 			},
 		});
 	},
+
+	async predict(formData: FormData) {
+		return fetch(`${SERVER_URL}/predict`, {
+			method: 'POST',
+			body: formData,
+		});
+	},
 };

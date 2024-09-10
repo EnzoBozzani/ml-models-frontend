@@ -28,6 +28,11 @@ export const addCategory = (
 
 				const categories = [...prev];
 
+				if (categories.includes(category)) {
+					setInvalidText('Category already exists!');
+					return prev;
+				}
+
 				categories.push(category);
 
 				return categories;

@@ -13,6 +13,7 @@ export interface DragAndDropFileUploaderProps {
 	accept: string[];
 	legendText: string;
 	text: string;
+	disabled?: boolean;
 }
 
 export const DragAndDropFileUploader = ({
@@ -23,6 +24,7 @@ export const DragAndDropFileUploader = ({
 	text,
 	accept,
 	legendText,
+	disabled = false,
 }: DragAndDropFileUploaderProps) => {
 	return (
 		<>
@@ -37,6 +39,7 @@ export const DragAndDropFileUploader = ({
 					onAddFiles={upload}
 					style={{ border: error ? '1px dotted red' : '' }}
 					className={styles.input}
+					disabled={disabled}
 				/>
 			</FormGroup>
 			{file && (
