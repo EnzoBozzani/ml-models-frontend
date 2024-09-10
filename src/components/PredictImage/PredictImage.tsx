@@ -1,7 +1,7 @@
 'use client';
 
 import { Dispatch, FormEvent, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
-import { Button, Form, InlineNotification } from '@carbon/react';
+import { Button, Form, InlineNotification, Loading } from '@carbon/react';
 import { ForecastLightning } from '@carbon/react/icons';
 
 import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
@@ -58,6 +58,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		ev.preventDefault();
 		setLoading(true);
 
+		setProbabilities([]);
 		setImageError(null);
 		setModelError(null);
 
@@ -68,6 +69,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 			if (!modelFile) {
 				setModelError('Model is required!');
 			}
+			setLoading(false);
 			return;
 		}
 
@@ -142,6 +144,10 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 				</Button>
 			</Form>
 			{probabilities.length !== 0 && <ProbabilitiesTable probabilities={probabilities} />}
+			<Loading
+				active={loading}
+				withOverlay
+			/>
 		</section>
 	);
 };
