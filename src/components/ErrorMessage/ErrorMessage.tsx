@@ -1,6 +1,6 @@
 import styles from './ErrorMessage.module.scss';
 
-export interface ErrorMessageProps {
+interface ErrorMessageProps {
 	error: string | null;
 }
 

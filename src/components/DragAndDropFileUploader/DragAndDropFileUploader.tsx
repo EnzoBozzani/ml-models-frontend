@@ -5,7 +5,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 
 import styles from './DragAndDropFileUploader.module.scss';
 
-export interface DragAndDropFileUploaderProps {
+interface DragAndDropFileUploaderProps {
 	upload: (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => void;
 	error: string | null;
 	file: File | null;

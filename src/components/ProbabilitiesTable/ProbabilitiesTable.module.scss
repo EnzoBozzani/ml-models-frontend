@@ -1,0 +1,11 @@
+@use '@carbon/colors';
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.tableContainer {
+	margin-top: layout.$spacing-10;
+}
+
+.table {
+	margin-top: layout.$spacing-06;
+}

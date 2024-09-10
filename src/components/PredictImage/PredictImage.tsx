@@ -8,6 +8,7 @@ import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
 
 import styles from './PredictImage.module.scss';
 import { fetcher } from '@/utils/fetcher';
+import ProbabilitiesTable from '../ProbabilitiesTable';
 
 const MB = 1_000_000;
 
@@ -21,6 +22,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 	const [modelError, setModelError] = useState<string | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
+	const [probabilities, setProbabilities] = useState<[string, number][]>([]);
 
 	const uploadModel = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
 		e.preventDefault();
@@ -77,11 +79,11 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		const predictionResponse = await fetcher.predict(formData);
 
 		if (predictionResponse.ok) {
-			const oi = await predictionResponse.json();
+			const probs = await predictionResponse.json();
 
-			alert(JSON.stringify(oi));
+			setProbabilities(probs);
 		} else {
-			alert('Não ');
+			alert('Error'); //TODO: Inline notification error
 		}
 
 		setImage(null);
@@ -139,6 +141,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 					Predict
 				</Button>
 			</Form>
+			{probabilities.length !== 0 && <ProbabilitiesTable probabilities={probabilities} />}
 		</section>
 	);
 };

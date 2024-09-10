@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const component = (name) => `import styles from './${name}.module.scss';
 
-export interface ${name}Props {}
+interface ${name}Props {}
 
 export const ${name} = ({}: ${name}Props) => {
   return <div>Hello 👋, I am a ${name} component.</div>;

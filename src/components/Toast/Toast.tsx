@@ -2,8 +2,6 @@
 
 import { ToastNotification } from '@carbon/react';
 
-import { useToast } from '@/hooks/useToast';
-
 import styles from './Toast.module.scss';
 import { ToastDetail } from '../ToastProvider/ToastProvider';
 
