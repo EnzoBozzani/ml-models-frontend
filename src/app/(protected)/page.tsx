@@ -1,9 +1,9 @@
-import HomeContentSwitcher from '@/components/HomeContentSwitcher';
+import TabsSwitcher from '@/components/TabsSwitcher';
 
 const Home = () => {
 	return (
 		<main>
-			<HomeContentSwitcher />
+			<TabsSwitcher />
 		</main>
 	);
 };

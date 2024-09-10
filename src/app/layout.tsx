@@ -5,7 +5,7 @@ import { IBM_Plex_Sans } from 'next/font/google';
 import ThemePreference, { setInitialThemeScript } from '@/components/ThemePreference';
 import ToastProvider from '@/components/ToastProvider';
 
-import './globals.scss';
+import '@/styles/globals.scss';
 
 const ibmPlexSans = IBM_Plex_Sans({ weight: ['100', '200', '300', '400', '500', '600', '700'], subsets: ['latin'] });
 
