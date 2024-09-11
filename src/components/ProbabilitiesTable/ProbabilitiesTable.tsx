@@ -6,25 +6,25 @@ import { Dispatch, SetStateAction } from 'react';
 import { Close } from '@carbon/react/icons';
 
 interface ProbabilitiesTableProps {
-	probabilities: [string, number][];
-	previewUrl: string;
-	setProbabilities: Dispatch<SetStateAction<[string, number][]>>;
-	setPreviewUrl: Dispatch<SetStateAction<string | null>>;
+	probabilities: [string, number][][];
+	imageVisualizationUrls: string[];
+	setProbabilities: Dispatch<SetStateAction<[string, number][][]>>;
+	setImageVisualizationUrls: Dispatch<SetStateAction<string[]>>;
 }
 
 export const ProbabilitiesTable = ({
 	probabilities,
-	previewUrl,
+	imageVisualizationUrls,
 	setProbabilities,
-	setPreviewUrl,
+	setImageVisualizationUrls,
 }: ProbabilitiesTableProps) => {
 	const headers = ['Category', 'Probability'];
 	return (
-		<div className={styles.tableContainer}>
+		<div className={styles.tables}>
 			<Tag
 				onClick={() => {
 					setProbabilities([]);
-					setPreviewUrl(null);
+					setImageVisualizationUrls([]);
 				}}
 				className={styles.cleanOutputsTag}
 			>
@@ -32,38 +32,42 @@ export const ProbabilitiesTable = ({
 					<span>Clean all outputs</span> <Close size={16} />
 				</div>
 			</Tag>
-			<h3>
-				Most likely categories for
-				<Image
-					src={previewUrl}
-					alt='uploaded image'
-					width={50}
-					height={50}
-					className={styles.image}
-				/>
-			</h3>
-			<Table
-				size='lg'
-				useZebraStyles={false}
-				aria-label='probabilities table'
-				className={styles.table}
-			>
-				<TableHead>
-					<TableRow>
-						{headers.map((header) => (
-							<TableHeader key={header}>{header}</TableHeader>
-						))}
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{probabilities.map((row) => (
-						<TableRow key={`${probabilities[0]} ${probabilities[1]}`}>
-							<TableCell>{row[0]}</TableCell>
-							<TableCell>{(row[1] * 100).toFixed(2)}%</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			{probabilities.map((probs, i) => (
+				<>
+					<h3>
+						Most likely categories for
+						<Image
+							src={imageVisualizationUrls[i]}
+							alt='uploaded image'
+							width={50}
+							height={50}
+							className={styles.image}
+						/>
+					</h3>
+					<Table
+						size='lg'
+						useZebraStyles={false}
+						aria-label='probabilities table'
+						className={styles.table}
+					>
+						<TableHead>
+							<TableRow>
+								{headers.map((header) => (
+									<TableHeader key={header}>{header}</TableHeader>
+								))}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{probs.map((row) => (
+								<TableRow key={`${probs[0]} ${probs[1]}`}>
+									<TableCell>{row[0]}</TableCell>
+									<TableCell>{(row[1] * 100).toFixed(2)}%</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</>
+			))}
 		</div>
 	);
 };

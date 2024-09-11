@@ -1,4 +1,5 @@
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+const LOCAL_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const fetcher = {
 	async searchImages(categories: string[]) {
@@ -24,6 +25,12 @@ export const fetcher = {
 		return fetch(`${SERVER_URL}/predict`, {
 			method: 'POST',
 			body: formData,
+		});
+	},
+
+	async listCategoriesWithBam() {
+		return fetch(`${LOCAL_URL}/api/bam`, {
+			method: 'GET',
 		});
 	},
 };

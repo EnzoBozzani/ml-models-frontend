@@ -2,11 +2,11 @@
 @use '@carbon/layout';
 @use '@carbon/grid';
 
-.tableContainer {
+.tables {
 	margin-top: layout.$spacing-06;
 
 	h3 {
-		margin-top: layout.$spacing-04;
+		margin-top: layout.$spacing-08;
 		display: flex;
 		align-items: center;
 		gap: layout.$spacing-04;
@@ -28,7 +28,7 @@
 }
 
 .table {
-	margin-top: layout.$spacing-06;
+	margin-top: layout.$spacing-04;
 }
 
 .image {
