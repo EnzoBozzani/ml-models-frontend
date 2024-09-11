@@ -4,11 +4,11 @@ import { Dispatch, FormEvent, SetStateAction, SyntheticEvent, useEffect, useStat
 import { Button, Form, InlineNotification, Loading } from '@carbon/react';
 import { ForecastLightning } from '@carbon/react/icons';
 
+import { fetcher } from '@/utils/fetcher';
 import DragAndDropFileUploader from '@/components/DragAndDropFileUploader';
+import ProbabilitiesTable from '@/components/ProbabilitiesTable';
 
 import styles from './PredictImage.module.scss';
-import { fetcher } from '@/utils/fetcher';
-import ProbabilitiesTable from '../ProbabilitiesTable';
 
 const MB = 1_000_000;
 
@@ -23,6 +23,8 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 	const [imageError, setImageError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [probabilities, setProbabilities] = useState<[string, number][]>([]);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+	const [responseError, setResponseError] = useState<string | null>(null);
 
 	const uploadModel = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
 		e.preventDefault();
@@ -61,6 +63,8 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		setProbabilities([]);
 		setImageError(null);
 		setModelError(null);
+		setResponseError(null);
+		setPreviewUrl(null);
 
 		if (!image || !modelFile) {
 			if (!image) {
@@ -83,9 +87,10 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		if (predictionResponse.ok) {
 			const probs = await predictionResponse.json();
 
+			setPreviewUrl(URL.createObjectURL(image));
 			setProbabilities(probs);
 		} else {
-			alert('Error'); //TODO: Inline notification error
+			setResponseError('Something went wrong while predicting your images...');
 		}
 
 		setImage(null);
@@ -143,7 +148,21 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 					Predict
 				</Button>
 			</Form>
-			{probabilities.length !== 0 && <ProbabilitiesTable probabilities={probabilities} />}
+			{responseError && (
+				<InlineNotification
+					kind='error'
+					title={responseError}
+					className={styles.errorNotification}
+				/>
+			)}
+			{probabilities.length !== 0 && previewUrl && (
+				<ProbabilitiesTable
+					previewUrl={previewUrl}
+					probabilities={probabilities}
+					setPreviewUrl={setPreviewUrl}
+					setProbabilities={setProbabilities}
+				/>
+			)}
 			<Loading
 				active={loading}
 				withOverlay
