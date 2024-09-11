@@ -17,13 +17,13 @@ interface PredictImageProps {
 }
 
 export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => {
-	const [modelFile, setModelFile] = useState<File | null>(null);
-	const [image, setImage] = useState<File | null>(null);
+	const [modelFile, setModelFile] = useState<File[]>([]);
+	const [images, setImages] = useState<File[]>([]);
 	const [modelError, setModelError] = useState<string | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(false);
-	const [probabilities, setProbabilities] = useState<[string, number][]>([]);
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+	const [probabilities, setProbabilities] = useState<[string, number][][]>([]);
+	const [imageVisualizationUrls, setImageVisualizationUrls] = useState<string[]>([]);
 	const [responseError, setResponseError] = useState<string | null>(null);
 
 	const uploadModel = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
@@ -38,7 +38,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 			return;
 		}
 
-		setModelFile(f);
+		setModelFile([f]);
 	};
 
 	const uploadImage = (e: SyntheticEvent<HTMLElement, Event>, content: { addedFiles: File[] }) => {
@@ -46,14 +46,29 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 
 		setImageError(null);
 
-		const f = content.addedFiles[0];
+		const imgs = content.addedFiles
+			.map((f) => {
+				if (f.size > 2 * MB) {
+					setImageError(
+						`${f.name.substring(0, 20)} has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 2MB.`
+					);
+					return;
+				}
 
-		if (f.size > 2 * MB) {
-			setImageError(`The file has a size of ~${(f.size / MB).toFixed(1)}MB. Max file size is 2MB.`);
-			return;
-		}
+				return f;
+			})
+			.filter((img) => !!img);
 
-		setImage(f);
+		setImages((prev) => {
+			const newImages = [...prev, ...imgs];
+
+			if (prev.length + imgs.length > 10) {
+				setImageError('Max of 10 images reached!');
+				return prev;
+			}
+
+			return newImages;
+		});
 	};
 
 	const submitPrediction = async (ev: FormEvent<HTMLFormElement>) => {
@@ -61,13 +76,13 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 		setLoading(true);
 
 		setProbabilities([]);
+		setImageVisualizationUrls([]);
 		setImageError(null);
 		setModelError(null);
 		setResponseError(null);
-		setPreviewUrl(null);
 
-		if (!image || !modelFile) {
-			if (!image) {
+		if (modelFile.length === 0 || images.length === 0) {
+			if (!images) {
 				setImageError('Image is required!');
 			}
 			if (!modelFile) {
@@ -79,22 +94,33 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 
 		const formData = new FormData();
 
-		formData.append('image', image);
-		formData.append('model', modelFile);
+		images.forEach((image) => {
+			formData.append('images', image);
+			setImageVisualizationUrls((prev) => {
+				const newList = [...prev];
+
+				newList.push(URL.createObjectURL(image));
+
+				return newList;
+			});
+		});
+		formData.append('model', modelFile[0]);
 
 		const predictionResponse = await fetcher.predict(formData);
 
 		if (predictionResponse.ok) {
 			const probs = await predictionResponse.json();
 
-			setPreviewUrl(URL.createObjectURL(image));
 			setProbabilities(probs);
 		} else {
-			setResponseError('Something went wrong while predicting your images...');
+			const res = await predictionResponse.json();
+
+			setResponseError(res.error);
+			setImageVisualizationUrls([]);
 		}
 
-		setImage(null);
-		setModelFile(null);
+		setImages([]);
+		setModelFile([]);
 
 		setLoading(false);
 	};
@@ -118,7 +144,7 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 			>
 				<div className={styles.dragAndDrop}>
 					<DragAndDropFileUploader
-						file={modelFile}
+						files={modelFile}
 						error={modelError}
 						upload={uploadModel}
 						text='Max file size is 200mb. Only .pkl files are supported'
@@ -132,12 +158,13 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 					<DragAndDropFileUploader
 						accept={['image/jpeg']}
 						error={imageError}
-						file={image}
+						files={images}
 						id='image'
-						legendText='Upload image'
+						legendText='Upload images (up to 10)'
 						text='Max file size is 2mb. Only .jpg files are supported'
 						upload={uploadImage}
 						disabled={loading}
+						multiple
 					/>
 				</div>
 				<Button
@@ -155,11 +182,11 @@ export const PredictImage = ({ setTabsSwitcherDisabled }: PredictImageProps) => 
 					className={styles.errorNotification}
 				/>
 			)}
-			{probabilities.length !== 0 && previewUrl && (
+			{probabilities.length !== 0 && imageVisualizationUrls.length !== 0 && (
 				<ProbabilitiesTable
-					previewUrl={previewUrl}
+					imageVisualizationUrls={imageVisualizationUrls}
 					probabilities={probabilities}
-					setPreviewUrl={setPreviewUrl}
+					setImageVisualizationUrls={setImageVisualizationUrls}
 					setProbabilities={setProbabilities}
 				/>
 			)}
