@@ -1,3 +1,22 @@
 @use '@carbon/colors';
 @use '@carbon/layout';
 @use '@carbon/grid';
+
+.section {
+	margin-top: layout.$spacing-08;
+	width: 100%;
+
+	legend {
+		font-weight: 700;
+		font-size: 14px;
+	}
+}
+
+.submitBtn {
+	margin-top: layout.$spacing-06;
+	width: 100%;
+
+	@include grid.breakpoint-down('md') {
+		margin: 0 auto;
+	}
+}

@@ -1,0 +1,33 @@
+@use '@carbon/layout';
+@use '@carbon/grid';
+
+.title {
+	display: flex;
+	align-items: center;
+
+	gap: layout.$spacing-04;
+
+	@include grid.breakpoint-down('md') {
+		font-size: 20px;
+	}
+
+	@include grid.breakpoint-down('sm') {
+		font-size: 16px;
+	}
+}
+
+.icon {
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
+
+	@include grid.breakpoint-down('md') {
+		width: 20px;
+		height: 20px;
+	}
+
+	@include grid.breakpoint-down('sm') {
+		width: 16px;
+		height: 16px;
+	}
+}
