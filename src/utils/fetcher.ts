@@ -28,12 +28,6 @@ export const fetcher = {
 		});
 	},
 
-	async listCategoriesWithBam() {
-		return fetch(`${LOCAL_URL}/api/bam`, {
-			method: 'GET',
-		});
-	},
-
 	async predictDogImages(formData: FormData) {
 		return fetch(`${SERVER_URL}/dog-breed-identifier`, {
 			method: 'POST',
