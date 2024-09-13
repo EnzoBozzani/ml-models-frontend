@@ -6,6 +6,7 @@ import styles from './DogBreedIdentifierForm.module.scss';
 import { Button, Form, InlineNotification, Loading } from '@carbon/react';
 import { fetcher } from '@/utils/fetcher';
 import ProbabilitiesTable from '../ProbabilitiesTable';
+import { ForecastLightning } from '@carbon/react/icons';
 
 const MB = 1_000_000;
 
@@ -96,10 +97,7 @@ export const DogBreedIdentifierForm = ({}: DogBreedIdentifierFormProps) => {
 
 	return (
 		<section className={styles.section}>
-			<Form
-				onSubmit={predict}
-				className={styles.form}
-			>
+			<Form onSubmit={predict}>
 				<DragAndDropFileUploader
 					id='images'
 					accept={['image/jpeg']}
@@ -111,7 +109,13 @@ export const DogBreedIdentifierForm = ({}: DogBreedIdentifierFormProps) => {
 					disabled={loading}
 					multiple
 				/>
-				<Button type='submit'>Classify</Button>
+				<Button
+					renderIcon={ForecastLightning}
+					type='submit'
+					className={styles.submitBtn}
+				>
+					Predict
+				</Button>
 			</Form>
 			{responseError && (
 				<InlineNotification
