@@ -33,4 +33,11 @@ export const fetcher = {
 			method: 'GET',
 		});
 	},
+
+	async predictDogImages(formData: FormData) {
+		return fetch(`${SERVER_URL}/dog-breed-identifier`, {
+			method: 'POST',
+			body: formData,
+		});
+	},
 };
